@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Website Credits Roll</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #fff;
+      color: #2d08fd;
+      font-family: Arial, sans-serif;
+    }
+
+    #stickyNav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      padding: 12px 20px;
+      background: #1cb924;
+      box-shadow: 0 2px 10px rgb(0 0 0 / 22%);
+    }
+
+    nav {
+      display: flex;
+      max-width: 1200px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .decor {
+      display: inline-block;
+      margin: 4px;
+      padding: 10px 16px;
+      border-radius: 5px;
+      background: #007bff;
+      box-shadow: 0 0 12px #007bff;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .decor:hover,
+    .decor:focus-visible {
+      background: #0056b3;
+      outline: 2px solid #ffd700;
+      outline-offset: 2px;
+    }
+
+    main {
+      width: min(92vw, 760px);
+      margin: 30px auto;
+      padding: 28px;
+      border: 1px solid #dce8ff;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 8px 28px rgb(0 123 255 / 14%);
+    }
+
+    .page-logo {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .page-logo img {
+      width: auto;
+      height: 53px;
+      max-width: 30vw;
+      object-fit: contain;
+    }
+
+    h1 {
+      margin: 0 0 18px;
+      color: #2d08fd;
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      font-size: clamp(1.35rem, 4vw, 2rem);
+      text-align: center;
+    }
+
+    p {
+      margin: 0 0 20px;
+      color: rgb(121 4 121);
+      line-height: 1.5;
+    }
+
+    .ticker {
+      height: 168px;
+      overflow: hidden;
+      border-radius: 10px;
+      border: 1px solid #d7e5ff;
+      background: #f7fbff;
+      box-shadow: 0 0 10px rgb(0 123 255 / 12%);
+    }
+
+    .ticker-track {
+      animation: scroll-up 18s linear infinite;
+    }
+
+    .ticker-line {
+      min-height: 60px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(78px, 35%);
+      gap: 10px;
+      align-items: center;
+      padding: 0 12px;
+      border-bottom: 1px solid #dbeafe;
+      color: #2d08fd;
+      font-size: 1rem;
+    }
+
+    .ticker-contribution {
+      font-weight: 600;
+    }
+
+    .ticker-name {
+      color: rgb(121 4 121);
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+
+    .ticker-line--start,
+    .ticker-line--finish {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .ticker-line--start {
+      background: #007bff;
+      color: #fff;
+    }
+
+    .ticker-line--finish {
+      background: #1cb924;
+      color: #fff;
+    }
+
+    .ticker-spacer {
+      height: 84px;
+    }
+
+    @keyframes scroll-up {
+      to {
+        transform: translateY(-50%);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ticker {
+        height: auto;
+      }
+
+      .ticker-track {
+        animation: none;
+      }
+
+      .ticker-copy {
+        display: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #stickyNav {
+        padding: 10px 12px;
+      }
+
+      nav {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .decor {
+        grid-column: span 2;
+        margin: 0;
+        padding: 10px 4px;
+        font-size: 0.9rem;
+        text-align: center;
+      }
+
+      .decor:nth-child(4) {
+        grid-column: 2 / span 2;
+      }
+
+      .decor:nth-child(5) {
+        grid-column: 4 / span 2;
+      }
+
+      main {
+        padding: 20px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header id="stickyNav">
+    <nav aria-label="Main navigation">
+      <a class="decor" href="index.html">Home</a>
+      <a class="decor" href="about1.html">About</a>
+      <a class="decor" href="feedback1.html">Feedback</a>
+      <a class="decor" href="Signin1.html">Sign in</a>
+      <a class="decor" href="your country.html">Country</a>
+    </nav>
+  </header>
+  <main>
+    <div class="page-logo" aria-label="Website logos">
+      <img src="kui.jpg" alt="Website logo">
+      <img src="yuto.jpg" alt="Website logo">
+    </div>
+    <h1>Glory be to the Almighty God</h1>
+    <p>This page recognizes the people who helped create and support this website. Their contributions appear below.</p>
+
+    <div class="ticker" aria-label="Website credits">
+      <div class="ticker-track">
+        <div class="ticker-line ticker-line--start"><span class="ticker-contribution">— CREDITS BEGIN —</span></div>
+        <div class="ticker-line"><span class="ticker-contribution">Website creator</span><span class="ticker-name">Boateng Malfred Aseda</span></div>
+        <div class="ticker-line"><span class="ticker-contribution">Design</span><span class="ticker-name">Boateng Malfred Aseda</span></div>
+        <div class="ticker-line"><span class="ticker-contribution">Content and research</span><span class="ticker-name">Boateng Malfred Aseda and Samuel Nana Boateng</span></div>
+        <div class="ticker-line"><span class="ticker-contribution">Development and technical support</span><span class="ticker-name">Achinakrom Senior High 2027 Science Computing Students</span></div>
+<div class="ticker-line"><span class="ticker-contribution">Special thanks</span><span class="ticker-name">Mr. and Mrs. Boateng and family</span></div>
+<div class="ticker-line"><span class="ticker-contribution">Special thanks</span><span class="ticker-name">Frimpong Nkansah Kelvin (sybar)</span></div>
+<div class="ticker-line"><span class="ticker-contribution">Special thanks</span><span class="ticker-name">Patience Anongwini</span></div>
+<div class="ticker-line"><span class="ticker-contribution">Special thanks</span><span class="ticker-name">Ibrahim Minat</span></div>
+<div class="ticker-line"><span class="ticker-contribution">Special thanks</span><span class="ticker-name">Micheal(Kingzy Mike)</span></div>
+<div class="ticker-line"><span class="ticker-contribution">Special thanks</span><span class="ticker-name">Godfred Graham Arthur Hassan</span></div>
+<div class="ticker-line"><span class="ticker-contribution">Special thanks</span><span class="ticker-name">Praise Amd Prayer Center(PPC) AG</span></div>
+<div class="ticker-line"><span class="ticker-contribution">Special thanks</span><span class="ticker-name">Bethel Assemblies Of God</span></div>
+        <div class="ticker-line"><span class="ticker-contribution">With gratitude</span><span class="ticker-name">Everyone who contributed</span></div>
+        <div class="ticker-spacer" aria-hidden="true"></div>
+        <div class="ticker-line ticker-line--finish"><span class="ticker-contribution">— END OF CREDITS —</span></div>
+        <div class="ticker-copy" aria-hidden="true">
+          <div class="ticker-line ticker-line--start"><span class="ticker-contribution">— CREDITS BEGIN —</span></div>
+        <div class="ticker-line"><span class="ticker-contribution">Website creator</span><span class="ticker-name">Boateng Malfred Aseda</span></div>
+        <div class="ticker-line"><span class="ticker-contribution">Design</span><span class="ticker-name">Boateng Malfred Aseda</span></div>
+        <div class="ticker-line"><span class="ticker-contribution">Content and research</span><span class="ticker-name">Boateng Malfred Aseda and Samuel Nana Boateng</span></div>
+        <div class="ticker-line"><span class="ticker-contribution">Development and technical support</span><span class="ticker-name">Achinakrom Senior High 2027 Science Computing Students</span></div>
+<div class="ticker-line"><span class="ticker-contribution">Special thanks</span><span class="ticker-name">Mr. and Mrs. Boateng and family</span></div>
+<div class="ticker-line"><span class="ticker-contribution">Special thanks</span><span class="ticker-name">Frimpong Nkansah Kelvin (sybar)</span></div>
+<div class="ticker-line"><span class="ticker-contribution">Special thanks</span><span class="ticker-name">Patience Anongwini</span></div>
+<div class="ticker-line"><span class="ticker-contribution">Special thanks</span><span class="ticker-name">Ibrahim Minat</span></div>
+<div class="ticker-line"><span class="ticker-contribution">Special thanks</span><span class="ticker-name">Micheal(Kingzy Mike)</span></div>
+<div class="ticker-line"><span class="ticker-contribution">Special thanks</span><span class="ticker-name">Godfred Graham Arthur Hassan</span></div>
+<div class="ticker-line"><span class="ticker-contribution">Special thanks</span><span class="ticker-name">Praise Amd Prayer Center(PPC) AG</span></div>
+<div class="ticker-line"><span class="ticker-contribution">Special thanks</span><span class="ticker-name">Bethel Assemblies Of God</span></div>
+        <div class="ticker-line"><span class="ticker-contribution">With gratitude</span><span class="ticker-name">Everyone who contributed</span></div>
+        <div class="ticker-spacer" aria-hidden="true"></div>
+        <div class="ticker-line ticker-line--finish"><span class="ticker-contribution">— END OF CREDITS —</span></div>
+          <div class="ticker-spacer" aria-hidden="true"></div>
+          <div class="ticker-line ticker-line--finish"><span class="ticker-contribution">— END OF CREDITS —</span></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
