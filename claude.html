@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AG World: Global Assemblies of God Directory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="AG.css">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#F4F6FB; --surface:#FFFFFF; --ink:#111A3A; --muted:#566086; --line:#DCE1F0; --flame:#FF5A1F;
+  --c-africa:#F4B223; --on-africa:#2B1D00;
+  --c-asia:#F27B78;   --on-asia:#3A0B0A;
+  --c-europe:#3B5BDB; --on-europe:#FFFFFF;
+  --c-na:#0A7F70;     --on-na:#FFFFFF;
+  --c-sa:#7B4FD1;     --on-sa:#FFFFFF;
+  --c-oc:#27A8E0;     --on-oc:#06233A;
+  --display:'Bricolage Grotesque','Avenir Next','Segoe UI',system-ui,sans-serif;
+  --body:'Instrument Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#0B1126;--surface:#141B38;--ink:#EEF1FF;--muted:#A2ABCB;--line:#28315A}
+}
+:root[data-theme="dark"]{--bg:#0B1126;--surface:#141B38;--ink:#EEF1FF;--muted:#A2ABCB;--line:#28315A}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 76px);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--flame);outline-offset:2px}
+.wrap{max-width:880px;margin:0 auto;padding:0 18px}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;overflow:hidden;padding:46px 0 26px}
+.ripples{position:absolute;right:-120px;top:-110px;width:420px;height:420px;pointer-events:none}
+.hero .wrap{position:relative}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(3.6rem,17vw,7rem);line-height:.86;letter-spacing:-.035em;margin:0 0 20px;font-variation-settings:"opsz" 96}
+.lede{font-family:var(--display);font-weight:500;font-size:clamp(1.3rem,5.2vw,1.9rem);line-height:1.2;letter-spacing:-.01em;max-width:24em;margin:0 0 6px;font-variation-settings:"opsz" 32}
+.lede b{font-weight:800}
+.hint{color:var(--muted);margin:14px 0 14px;font-size:.95rem}
+
+/* ---------- Continent tiles ---------- */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0;padding:0;list-style:none}
+@media(min-width:640px){.tiles{grid-template-columns:repeat(3,1fr)}}
+.tile{width:100%;text-align:left;border:0;cursor:pointer;background:var(--k);color:var(--on);border-radius:22px;
+  padding:16px 16px 14px;min-height:96px;display:flex;flex-direction:column;justify-content:space-between;transition:opacity .15s,transform .15s}
+.tile b{font-family:var(--display);font-weight:700;font-size:1.35rem;line-height:1.05;letter-spacing:-.015em}
+.tile span{font-size:.9rem;opacity:.85}
+.tiles.has-sel .tile[aria-pressed="false"]{opacity:.38}
+.tile[aria-pressed="true"]{outline:3px solid var(--ink);outline-offset:2px}
+.tile:active{transform:scale(.98)}
+
+/* ---------- Search ---------- */
+.searchbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:14px 0 10px;margin-top:10px}
+.search{display:flex;align-items:center;gap:10px;background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:0 14px}
+.search:focus-within{border-color:var(--flame)}
+.search svg{flex:none;color:var(--muted)}
+.search input{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font:inherit;padding:14px 0;outline:none}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:10px 0 0;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:2px solid var(--line);background:transparent;border-radius:999px;padding:7px 14px;cursor:pointer;min-height:40px;font-size:.9rem}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px}
+
+.meta{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:.9rem;margin:8px 0 14px}
+.sort{border:2px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:.9rem;border-radius:12px;padding:7px 10px}
+.clear{border:0;background:none;color:var(--ink);font-weight:600;text-decoration:underline;cursor:pointer;padding:6px 0}
+
+/* ---------- Index ---------- */
+.band{display:flex;justify-content:space-between;align-items:baseline;background:var(--k);color:var(--on);
+  border-radius:22px 22px 0 0;padding:18px 20px 14px;margin-top:30px}
+.band h2{font-family:var(--display);font-weight:800;font-size:clamp(1.9rem,8vw,2.8rem);letter-spacing:-.025em;line-height:1;margin:0}
+.band span{font-size:.9rem;opacity:.85;text-align:right}
+.index{background:var(--surface);border-radius:0 0 22px 22px;overflow:hidden}
+.flat{background:var(--surface);border-radius:22px;overflow:hidden}
+.row{width:100%;display:grid;grid-template-columns:6px 1fr auto;gap:14px;align-items:center;text-align:left;
+  background:transparent;border:0;border-bottom:1px solid var(--line);padding:0;cursor:pointer}
+.row:last-child{border-bottom:0}
+.row:hover{background:color-mix(in srgb,var(--k) 10%,transparent)}
+.row .bar{align-self:stretch;background:var(--k)}
+.row .t{padding:13px 0;min-width:0}
+.row .t b{display:block;font-family:var(--display);font-weight:700;font-size:1.12rem;line-height:1.15;letter-spacing:-.01em}
+.row .t i{display:block;font-style:normal;color:var(--muted);font-size:.88rem;line-height:1.3;margin-top:2px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.row .n{padding:0 16px 0 0;text-align:right;white-space:nowrap}
+.row .n b{display:block;font-family:var(--display);font-weight:800;font-size:1.25rem;line-height:1}
+.row .n small{color:var(--muted);font-size:.78rem}
+.empty{padding:40px 12px;text-align:center;color:var(--muted)}
+.empty b{display:block;color:var(--ink);font-family:var(--display);font-size:1.4rem;margin-bottom:4px}
+
+/* ---------- Detail sheet ---------- */
+dialog{border:0;padding:0;background:var(--surface);color:var(--ink);width:min(580px,100%);max-height:90vh;margin:auto auto 0;border-radius:28px 28px 0 0;overflow:hidden}
+@media(min-width:640px){dialog{margin:auto;border-radius:28px}}
+dialog::backdrop{background:rgba(6,10,28,.62)}
+.sheet{display:flex;flex-direction:column;max-height:90vh}
+.sheet header{background:var(--k);color:var(--on);padding:22px 20px 18px;position:relative}
+.sheet header .where{font-size:.92rem;opacity:.85}
+.sheet header h3{font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,8vw,2.4rem);line-height:1;letter-spacing:-.025em;margin:4px 48px 8px 0}
+.sheet header .org{font-size:1rem;line-height:1.3;margin:0 0 12px;opacity:.92}
+.badge{display:inline-flex;align-items:center;font-size:.82rem;background:rgba(255,255,255,.28);padding:5px 11px;border-radius:999px}
+.x{position:absolute;right:12px;top:12px;width:44px;height:44px;border-radius:50%;border:0;background:rgba(0,0,0,.18);color:inherit;font-size:1.5rem;cursor:pointer}
+.acts{display:flex;gap:8px;flex-wrap:wrap;padding:14px 20px 4px}
+.act{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:999px;background:var(--ink);color:var(--bg);text-decoration:none;font-weight:600;font-size:.95rem}
+.sheet .body{overflow:auto;padding:4px 20px 8px}
+dl{margin:0}
+.f{display:grid;grid-template-columns:120px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.f dt{color:var(--muted);font-size:.88rem}
+.f dd{margin:0;overflow-wrap:anywhere}
+.f dd.na{color:var(--muted);font-style:italic}
+.f a{color:inherit;text-decoration-thickness:2px;text-underline-offset:3px}
+.sheet footer{padding:12px 20px calc(16px + env(safe-area-inset-bottom,0px));font-size:.85rem;color:var(--muted)}
+.sheet footer a{color:var(--ink);font-weight:600}
+
+/* ---------- About ---------- */
+.about{margin-top:40px}
+.about h2{font-family:var(--display);font-weight:800;font-size:1.6rem;letter-spacing:-.02em;margin:0 0 10px}
+.legend{display:grid;gap:8px;margin:0 0 10px;padding:0;list-style:none}
+.about p{color:var(--muted);font-size:.92rem;margin:0}
+.notice{margin:26px 0 0;padding:4px 0 4px 18px;border-left:6px solid var(--flame);font-size:.9rem}
+.notice b{display:block;font-family:var(--display);font-size:1.15rem;margin-bottom:4px}
+footer.site{padding:26px 0 calc(40px + env(safe-area-inset-bottom,0px));font-size:.82rem;color:var(--muted)}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header id="stickyNav">
+                <div class="nav-inner">
+                    <nav>
+        <a class="decor" href="index.html">Home</a>
+        <a class="decor" href="about1.html">About</a>
+        <a class="decor" href="feedback1.html">Feedback</a>
+        <a class="decor" href="Signin1.html">Sign in</a>
+        <a class="decor" href="your country.html">Country</a>
+                    </nav>
+                </div>
+            </header>
+        <br>
+        <div class=logo><img height=53px width=10% src="kui.jpg" alt="logo">
+        <img height=53px width=10% src="yuto.jpg" alt="logo 2"></div>
+<header class="hero">
+  <svg class="ripples" viewBox="0 0 400 400" fill="none" stroke-width="10" aria-hidden="true">
+    <circle cx="200" cy="200" r="190" stroke="var(--c-oc)" opacity=".5"/>
+    <circle cx="200" cy="200" r="155" stroke="var(--c-sa)" opacity=".5"/>
+    <circle cx="200" cy="200" r="120" stroke="var(--c-na)" opacity=".55"/>
+    <circle cx="200" cy="200" r="85" stroke="var(--c-europe)" opacity=".55"/>
+    <circle cx="200" cy="200" r="50" stroke="var(--c-asia)" opacity=".7"/>
+    <circle cx="200" cy="200" r="18" fill="var(--flame)" stroke="none"/>
+  </svg>
+  <div class="wrap">
+    <h1>AG World</h1>
+    <p class="lede"><b>88 million</b> people in <b>451,000</b> churches, gathered in more than <b>180</b> national fellowships.</p>
+    <p class="hint">Pick a continent to browse. Totals as reported by the World Assemblies of God Fellowship.</p>
+    <ul class="tiles" id="tiles"></ul>
+  </div>
+</header>
+
+<main class="wrap" id="explorer">
+  <div class="searchbar">
+    <label class="search">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Search a country, church body or city" aria-label="Search the directory" autocomplete="off">
+    </label>
+    <div class="chips" id="statuses" role="group" aria-label="Filter by information status" hidden></div>
+  </div>
+
+  <div class="meta">
+    <span id="count" aria-live="polite"></span>
+    <span style="display:flex;gap:12px;align-items:center">
+      <button class="clear" id="clear" hidden>Clear filters</button>
+      <select class="sort" id="sort" aria-label="Sort records">
+        <option value="country">Country A–Z</option>
+        <option value="churches">Most churches</option>
+        <option value="adherents">Most members</option>
+      </select>
+    </span>
+  </div>
+
+  <div id="results"></div>
+
+  <section class="about">
+    <h2>How to read this directory</h2>
+    <ul class="legend" id="legend"></ul>
+    <p>Each record shows where its information comes from. Fields we do not have show as “Not currently available”. <span id="listed"></span></p>
+  </section>
+
+  <div class="notice" role="note">
+    <b>Information notice</b>
+    This directory is compiled from publicly available information and may not represent every Assemblies of God church, congregation, preaching point, district or organization. Names, addresses, leadership, administrative structures and other information may change. Information shown may differ from the current designation used by a local or national Assemblies of God organization. Please verify important information with the relevant official organization or local church.
+  </div>
+
+  <footer class="site">Independent directory. Not an official publication of the World Assemblies of God Fellowship.</footer>
+</main>
+
+<dialog id="sheet" aria-labelledby="st"></dialog>
+
+<script>
+const WAGF = "https://worldagfellowship.org/Fellowship/Participating-Countries/";
+const SRC = {A:WAGF+"A-F",G:WAGF+"G-L",M:WAGF+"M-R",S:WAGF+"S-Z"};
+const DATA = [];
+/* R(country, continent, region, organization, leader, address, phone, extras, sourcePage)
+   extras: w website, e email, ch churches, m members, ml members label, pa pastors,
+   pp preaching points, pl church plants, n notes */
+function R(c,k,r,o,l,a,p,x,s){const extras=x||{};DATA.push(Object.assign({country:c,continent:k,region:r||null,org:o,leader:l||null,address:a||null,phone:p||null,status:"official",source:SRC[s],churches:extras.ch||null,members:extras.m||null},extras))}
+const A="A",G="G",M="M",S="S";
+
+/* ---------- A–F ---------- */
+R("Albania","Europe",0,"The General Council of the Assemblies of God of Albania","Rev. Miljard Gosturani","Durrës, Albania","+355-69-405-5023",{},A);
+R("Angola","Africa","Central Africa","Angola Assemblies of God","Rev. Francisco Domingos Sebastião (leader)","Caixa Postal 4006, Luanda, Angola","+244-91-320-121",{},A);
+R("Argentina","South America",0,"Unión de las Asambleas de Dios","Rev. Walter Raúl Serantes, General Superintendent","Rivadavia 4160, 1205 Capital Federal, Buenos Aires","+54 11 4981 2588 / 4957",{w:"https://www.uad.org.ar/",ns:"https://www.uad.org.ar/"},A);
+R("Armenia","Asia",0,"Union of Evangelical Faith Churches of the Republic of Armenia","Rev. Dr. Rafael Grigoryan, General Superintendent","Vanadzor 2001; Vardanants 28","+374 99 59 59 47",{},A);
+R("Armenia","Asia",0,"Unity Church of Christ of the Gospel Faith of the Republic of Armenia","Rev. Rubik Tumanyan, General Superintendent","Yerevan 0034; Sherami 88","+374 77 94 50 90",{},A);
+R("Armenia","Asia",0,"'Vernatun' Evangelical Church in Yerevan","Rev. Artavazd Tadevosyan, General Superintendent","H. 117/2, str. 22, Nor Aresh, Yerevan 0075","+374 10 47 35 81",{},A);
+R("Aruba, Bonaire and Curaçao","North America","Caribbean","The Assemblies of God in Aruba, Bonaire and Curaçao","Rev. Kenneth Thijm, General Superintendent","P.O. Box 3073, Curaçao","+599 9 888 4080",{},A);
+R("Australia","Oceania",0,"Australian Christian Churches","Rev. Joel Chelliah, National President","P.O. Box 8093, Norwest NSW 2153","+61 2 8853 5160",{w:"https://www.acc.org.au/",ns:"https://www.acc.org.au/about/",ch:1100,m:400000,ml:"believers (more than)",n:"The national church says the Assemblies of God in Australia was renamed Australian Christian Churches in April 2007. It reports that Joel Chelliah was elected National President in April 2025 and that the ACC represents over 1,100 churches and more than 400,000 believers. The history page also records the establishment of Commonwealth Bible College in 1948."},A);
+R("Austria","Europe",0,"Freie Christengemeinde-Pfingstgemeinde","Pastor Peter Zalud, Chairman","Julius-Fritsche-Gasse 44, 5111 Bürmoos","+43 660 1132986",{w:"https://www.fcgoe.at/",ns:"https://www.fcgoe.at/",ch:81,m:5500,ml:"members (over 10,000 adherents)",pa:107,n:"The WAGF profile reports 81 churches, several church plants and 107 ordained pastors, and says the fellowship sends more than 20 missionaries to Asia, Africa and Europe. The national site is listed for organization updates; the WAGF figures may be out of date."},A);
+R("Bahamas","North America","Caribbean","Assemblies of God in the Bahamas","Rev. Patrick Paul, General Superintendent","P.O. Box N-7420, Nassau","+1 242-393-3453",{},A);
+R("Bangladesh","Asia",0,"Bangladesh Assemblies of God","Rev. Asa M. Kain, Chairman / General Superintendent",null,"+880 2 9 358946",{w:"https://www.bangladeshag.com/",ns:"https://www.bangladeshag.com/",e:"dhakaiya@agni.com",n:"The official website says Bangladesh Assemblies of God has served in Bangladesh since 1945, is affiliated with the World Assemblies of God Fellowship, and was registered under the Society Act in 1955. It describes its mission as fulfilling the Great Commission and serving people in need. The website reports over 400 churches, branches and outreaches across 46 of 64 districts; 230 credentialed ministers; and 55 church schools serving 4,320 children with 243 workers. These figures are undated and should be confirmed with the organization. It also identifies Ashirbad as its registered NGO and describes Assemblies of God Bible College as a worker-training partnership."},A);
+R("Belgium (Flemish)","Europe",0,"Verbond van Vlaamse Pinkstergemeenten (VVP)","Rev. Koenraad Celis, General Superintendent","Jozef Cardijnlaan 67, 1860 Meise","+32 486 609533",{w:"https://vvp.be/",ns:"https://vvp.be/",e:"koen-celis@vvp.be",n:"The VVP’s official website identifies it as Verbond van Vlaamse Pinkstergemeenten vzw and describes it as a community of local Pentecostal churches sharing the good news of salvation through Jesus Christ. The leadership and contact details shown here are from the WAGF listing and should be confirmed with the VVP."},A);
+R("Belgium (French)","Europe",0,"Assemblées de Dieu Francophones de Belgique","Rev. Gérald Meyer, President","Rue Alexandre Navet 50, 1480 Tubize","+32 471 324 104",{},A);
+R("Belize","North America","Central America","General Council of the Assemblies of God of Belize","Rvdo. Carlos Alfredo Caretagena, Assistant Superintendent","P.O. Box 463, Belize City","+501 224 5292",{w:"https://agbelize.org/",ns:"https://agbelize.org/",n:"The General Council of the Assemblies of God of Belize is the national fellowship affiliated with the World Assemblies of God Fellowship. The organization oversees churches, ministers, and Bible training across Belize."},A);
+R("Benin","Africa","West Africa","Eglise Evangélique des Assemblées de Dieu du Bénin","Rév. Gossou Sodji, Président","B.P. 111, Calavi","+229 95502511",{w:"https://eeadbenin.org/",ns:"https://eeadbenin.org/",n:"The EEAD Bénin site publishes sermon-message series by its president, Rév. Gossou Sodji, matching the leader listed in the WAGF profile. The site is primarily a sermon/news feed and does not provide verified current organization-wide statistics or contact details."},A);
+R("Bolivia","South America",0,"Las Asambleas de Dios de Bolivia","Rev. Juan Bohorquez Mayta","Santiago Primero Callejón 3 No 1669, El Alto, La Paz","+591 71290701",{},A);
+R("Botswana","Africa","Southern Africa","Assemblies of God in Botswana","Bishop Moratiwa Tshukudu, General Superintendent","P.O. Box 311, Gaborone","+267 72612000",{},A);
+R("Brazil","South America",0,"Convenção Geral das Assembléias de Deus no Brasil","Pr. José Wellington Costa Jr., Presidente","Av. Vicente de Carvalho 1083, Rio de Janeiro 21210-623","+55 11 2796-9122 / +55 21 98921-4420",{w:"https://cgadb.org.br/",ns:"https://cgadb.org.br/quem-somos/",n:"The CGADB's official history says it was formed in 1930, after the Assemblies of God movement began in Brazil through missionaries Daniel Berg and Gunnar Vingren. It describes the convention's role in uniting churches and representing them before public authorities. The history also records a national evangelistic initiative, Década da Colheita, in the 1990s."},A);
+R("Brunei","Asia",0,"BAGGC","Rev. Dr. Peter Chin, General Superintendent","P.O. Box 858, MPC, Bandar Seri Begawan BB3577",null,{},A);
+R("Bulgaria","Europe",0,"Assemblies of God Bulgaria","Pastor Rumen Bordjiev, President","2 Paskal Todorov Str., 1618 Sofia","+359 89 7868040",{},A);
+R("Bulgaria","Europe",0,"Pentecostal Churches of Bulgaria",null,"Plovdiv, Akademik Petar Dinekov 14",null,{},A);
+R("Burkina Faso","Africa","West Africa","Eglise des Assemblées de Dieu du Burkina Faso","Rev. Dr. Etienne Zongo","01 B.P. 458, Ouagadougou 01","72 36 33 22 / 76 67 77 50",{w:"https://www.eadbf.org/",ns:"https://www.eadbf.org/",n:"The national website names the Eglise des Assemblées de Dieu du Burkina Faso and says its mission is to proclaim the Gospel of Jesus Christ. It describes a strategic vision adopted for the 2021 centenary under the themes Reform, Revival and Outreach (3R). Leadership and contact details in this directory remain from the WAGF listing and should be confirmed."},A);
+R("Burundi","Africa",0,"Burundi Christian Life Ministries","Rev. Oled Ndayisenga, General Superintendent","10 Avenue du Peuple Murundi, Rohero 1","+257 22 27 91 45",{},A);
+R("Cambodia","Asia",0,"Assemblies of God of Cambodia","Rev. Tun Chaay","P.O. Box 618, Phnom Penh","+855 92 385 595",{ch:51,pa:49,pl:32,n:"51 churches, 65 developing churches and 32 recent plants, with 5,333 adult members and 7,554 children. Present in 15 of 24 provinces. 43 Cambodians study at Cambodia Bible Institute. Largest numbers of churches are around Takeo, Siem Reap, Sihanoukville and Battambang."},A);
+R("Cameroon","Africa","Central Africa","Assemblies of God Cameroon","Rev. Felix Bomah Ngah, General Superintendent","Rue Acacia 90B04, Biyem-Assi, Yaoundé","+237 677484441",{},A);
+R("Cameroon","Africa","Central Africa","Full Gospel Mission – Cameroon","Rev. Sokeng Alain Clement, General Superintendent","PO Box 11154, Yaoundé","+237 677 839 955",{},A);
+R("Canada","North America",0,"The General Conference of the Canadian Assemblies of God (Assemblées de Dieu du Canada)","Rev. Ray Narula, General Superintendent","190 Lynden Road, Brantford, Ontario N3R 8A3","+1 514 279-1100",{},A);
+R("Canada","North America",0,"Association Chrétienne pour la Francophonie (ACF), French World Christian Fellowship","Rev. Claude Houde, President","365 rue Du Parc Industriel, Longueuil, QC J4H 3V7","+1 450-651-5223",{},A);
+R("Canada","North America",0,"The Pentecostal Assemblies of Canada","Dr. David Wells, General Superintendent","2450 Milltower Court, Mississauga, ON L5N 5Z6","+1 905 542-7400",{w:"https://www.paoc.org/",ns:"https://www.paoc.org/family/who-we-are/about",ch:1100,n:"The national website reports more than 1,100 churches, over 235,000 people attending services in more than 40 languages, and credentials for more than 3,500 pastors and ministry leaders. These figures are as stated on the website and are not independently dated."},A);
+R("Canada","North America","Newfoundland and Labrador","Pentecostal Assemblies of Newfoundland and Labrador","Rev. Terry W. Snow, General Superintendent","P.O. Box 8895, Station A, St. John's, NL A1B 3T2","+1 709 753-6314",{w:"https://www.paonl.ca/",ns:"https://www.paonl.ca/",ch:122,m:8759,ml:"members",pa:399,n:"The national website describes its mission as engaging people with God's love, living hope and deep compassion, and says it equips believers and builds local faith communities. Church, member and minister counts come from the WAGF profile and may be out of date."},A);
+R("Cape Verde","Africa","West Africa","Assemblies of God of Cape Verde","Pastor Carlos Lima, General Superintendent","C.P. 505, Mindelo, São Vicente","+238 231 5982",{n:"Churches in Praia, Assomada and São Vicente. Ministries include cell groups, a semiweekly feeding programme (Mordecai Services), a Bible training centre, children's ministry and \"Women with Purpose\"."},A);
+R("Chile","South America",0,"Las Asambleas de Dios de Chile","Pr. Marcelo Marcón, Presidente","Av. Ejército Libertador 16, Santiago","+56 22 681 8221",{w:"https://www.lasasambleasdedios.cl/",ns:"https://www.lasasambleasdedios.cl/",n:"The national website identifies Las Asambleas de Dios de Chile as a nonprofit religious entity legally established on March 20, 1953, with legal domicile in Santiago and branches across the country. Leadership and contact details in this directory remain from the WAGF listing and should be confirmed with the national organization."},A);
+R("Colombia","South America",0,"Concilio de las Asambleas de Dios de Colombia","Rvdo. Alfonso Quevedo Castellanos, Presidente Nacional","Calle 68 No. 14A-60, Bogotá 110111","+57 1 745-2657",{w:"https://www.adcolombia.org/",ns:"https://www.adcolombia.org/",n:"The national website describes the council as organized into operational units called Pastorales. It says these units provide tools and training to church leaders and ministers, and support education, minister wellbeing, growth and expansion."},A);
+R("Costa Rica","North America","Central America","Asambleas de Dios en Costa Rica","Rvdo. Ricardo Castillo Medina, President","Apartado Postal 165-2150 Moravia, San José","+506 4080 9890",{w:"https://acadcr.org/",ns:"https://acadcr.org/",n:"The official ACAD website describes its commitments to the Bible, the Holy Spirit and missions, and its goal of seeing a healthy, Spirit-empowered church in every community. It reports more than 500 churches and 600 ministers in Costa Rica; the figures are undated and should be confirmed. Leadership and contact details in this directory remain from the WAGF listing."},A);
+R("Croatia","Europe",0,"Evangelical Pentecostal Church (EPC)","Damir Spoljaric, President","Cvjetkova 32, 31000 Osijek","+385 31 494 192",{w:"https://epc.hr/",ns:"https://epc.hr/",ch:40,pa:30,n:"The WAGF profile reports more than 40 churches, over 30 pastors and more than 2,000 believers, and notes that the church has sent missionaries to Bosnia and Herzegovina. The national website identifies the organization as the Evangelical Pentecostal Church in Croatia."},A);
+R("Czechia","Europe",0,"Apostolic Church","Bishop Martin Moldan","V Zídkách 402, 280 02 Kolín 2","+420 321 720 457",{w:"https://apostolskacirkev.cz/",ns:"https://apostolskacirkev.cz/"},A);
+R("Democratic Republic of the Congo","Africa","Central Africa","Communauté Assemblées de Dieu – Kinshasa","Pasteur Mavinga Masiala Eric, Représentant légal","B.P. 11758, Kinshasa 1","+243 816 050 135",{w:"https://adrdcongo.org/",ns:"https://adrdcongo.org/",n:"The official national website identifies the Communauté des Assemblées de Dieu en République Démocratique du Congo, affiliated with the worldwide Assemblies of God movement. It describes its work in Gospel proclamation, discipleship and church planting. Its welcome message is signed by Rév. Eric Mavinga Masiala, matching the leader listed in the WAGF profile. The site does not provide independently verified current organization-wide statistics."},A);
+R("Democratic Republic of the Congo","Africa","Central Africa","Congo Assemblies of God Fellowship (CAGF)","Rév. Dr. Cizungu M. Gérard, Surintendant Général","Province du Sud Kivu, Commune de Kadutu, Quartier Industriel","+243 980 529 530",{},A);
+R("Democratic Republic of the Congo","Africa","Central Africa","Assemblies of God – Kisangani","Pasteur Reuben Nongoyo Sungu, General Superintendent",null,"+243 812 006 460",{},A);
+R("Democratic Republic of the Congo","Africa","Central Africa","34ème Communauté des Assemblées de Dieu en Afrique (CADAF)","Rev. Jeremie Kamimbi, Président","P.O. Box 2394, Bukavu","+243 813 178 066",{},A);
+R("Denmark","Europe",0,"MOSAIK – Danish Pentecostal Movement","Rev. Martin Lorenzen, Chairman","Hjulhusvej 12B, 9550 Mariager","+45 29867770",{w:"https://mosaik.one/",ns:"https://mosaik.one/"},A);
+R("Dominican Republic","North America","Caribbean","Concilio Evangélico Nacional de las Asambleas de Dios en la República Dominicana","Rvdo. José Morales, Superintendent","Apartado 605, Santo Domingo","+1 809 564-3454",{w:"https://concilioad.org/",ns:"https://concilioad.org/",n:"The council’s official website identifies the Concilio Evangélico de las Asambleas de Dios de la República Dominicana, but says the site is being rebuilt and does not currently provide fuller organizational information. The leadership and contact details shown here are from the WAGF listing and should be confirmed directly."},A);
+R("Ecuador","South America",0,"Asambleas de Dios","Rvdo. Pepe Muñoz, General Superintendent","Av. 10 de agosto #32-89 y Mariana de Jesús, Quito","+593 2600-4518",{w:"https://www.ceade.ec/",ns:"https://www.ceade.ec/sobre_nosotros",n:"The verified Ecuadorian national site is ceade.ec (not the previously listed ceade.org, which displayed unrelated health content). The site identifies CEADE as the Assemblies of God in Ecuador, describes evangelism, leadership training and ministry to younger generations, and gives a history tracing the movement in Ecuador to 1962. Leadership and contact details in this directory remain from the WAGF listing and should be confirmed."},A);
+R("El Salvador","North America","Central America","Conferencia Evangélica de las Asambleas de Dios","Rvdo. Jeremías Bolaños Anaya, General Superintendent","Apartado Postal #809, San Salvador","+503 2239 5030",{ch:1700,pa:2200,n:"The WAGF profile reports the conference began in 1930 and lists churches, pastors, missionaries, schools and a Christian university; these figures and descriptions may be out of date. The previously listed national website could not be reached or verified during this update, so its link has been removed pending confirmation."},A);
+R("Equatorial Guinea","Africa","Central Africa","Concilio General de las Asambleas de Dios de Guinea Ecuatorial","Rev. Carpoforo Ochaga Ela Onguene, General Superintendent","Campus de las Asambleas de Dios, P.O. Box 846, Malabo","+240 222 015 798",{ch:118,m:18200,ml:"adherents",pa:122,n:"The Assemblies of God began in 1988."},A);
+R("Estonia","Europe",0,"Estonian Christian Pentecostal Church","Rev. Alur Õunpuu, Church Leader","Toompea 3, 10130 Tallinn","+372 5663 3110",{w:"https://eknk.ee/",ns:"https://eknk.ee/",e:"eknk@eknk.ee",n:"The church’s official website identifies it as Eesti Kristlik Nelipühi Kirik (Estonian Christian Pentecostal Church) and describes its vision as building life-giving congregations and faith communities throughout Estonia. The site lists the Tallinn address, phone and email shown here. Leadership details remain from the WAGF listing and should be confirmed."},A);
+R("Eswatini","Africa","Southern Africa","International Ministries Assemblies of God","Rev. Mathokoza Simelane, President","P.O. Box 2207, Mbabane","+268 4161731",{},A);
+R("Ethiopia","Africa","East Africa","Ethiopia Assemblies of God","Rev. Ayansa Obsi, General Secretary","PO Box 2595 Code 1250, Addis Ababa","+251 11 466 5174",{},A);
+R("Fiji","Oceania",0,"Assemblies of God of Fiji","Pastor Mosese Cakau, General Superintendent","Nasinu Revival Centre, 37 Joyce Place, Laqere, Nasinu (National Administration Office)","+679 331-2644",{w:"https://www.agfiji.org/",ns:"https://www.agfiji.org/",n:"The official site identifies the organization as the General Council Assemblies of God Fiji. It describes AG Fiji as a movement of believers committed to worshipping Jesus, discipleship, ministry to the next generation and missions. The site lists the Nasinu Revival Centre as its National Administration Office and gives the contact phone number shown here. Leadership details remain from the WAGF listing and should be confirmed."},A);
+R("Finland","Europe",0,"Pentecostal Church of Finland","Pastor Kauko Uusila, Executive Director","Tulppatie 20, 00880 Helsinki","+358 45 6327848",{w:"https://helluntaikirkko.fi/",ns:"https://helluntaikirkko.fi/",ch:240,m:65000,ml:"people in the churches, including children and youth (approx.)",pa:400},A);
+R("France","Europe",0,"Assemblées de Dieu de France","Rev. Yann Antoine, President","7 allée des Coteaux, 11110 Salles-d'Aude","+33 7 83 90 49 48",{w:"https://www.addfrance.fr/",ns:"https://www.addfrance.fr/",n:"The national website publishes the Assemblées de Dieu de France’s statement of belief, describing the church as a community of believers centered on Jesus Christ, apostolic teaching, Scripture, prayer and a missionary vocation. Leadership and contact details shown here are from the WAGF listing and should be confirmed with the national organization."},A);
+R("France","Europe",0,"Chiese Cristiane Italiane nel Nord Europa (CCINE)","Pastor Salvatore Talarico, President","19 Impasse des Iris, 57455 Seingbouse","+33 616 77 63 74",{w:"https://ccine.org/",ns:"https://ccine.org/",ch:70,m:2500,ml:"adherents (nearly)",pa:55,n:"The WAGF profile lists nearly 70 churches, about 2,500 adherents and 55 pastors, and says the fellowship has one missionary serving in Ukraine. These figures may be out of date."},A);
+R("French Polynesia","Oceania",0,"Assemblées de Dieu de Polynésie Française","Pasteur Eugène Lemaire, General Superintendent","B.P. 1817, 98713 Papeete, Tahiti","+689 730677",{w:"https://www.addpf.org/",ns:"https://www.addpf.org/",n:"The Assemblées de Dieu de Polynésie Française is the Pentecostal fellowship in French Polynesia affiliated with the World Assemblies of God Fellowship. It serves churches across the islands of Tahiti, Moorea, and the wider territory."},A);
+
+/* ---------- G–L ---------- */
+R("Gabon","Africa","Central Africa","Assemblies of God Gabon","Rev. Jude B. N'gouwa","PO Box 5136, Libreville","+241 1172 6415",{},G);
+R("Georgia","Asia",0,"Georgia Pentecostal Union","Bishop Oleg Khubashvili; Assistant Bishop Roman Gachechiladze","1 Tonike Eristavi, Tbilisi 0192","+995 32 697595",{},G);
+R("Germany","Europe",0,"Bund Freikirchlicher Pfingstgemeinden (BFP) KdöR","Rev. Friedhelm Holthuis, National Leader","Industriestraße 6, 64390 Erzhausen","+49 6150 97 37 0",{w:"https://www.bfp.de/",ns:"https://www.bfp.de/",n:"The national website describes BFP as a Pentecostal free-church federation and part of the worldwide Pentecostal movement. It reports more than 1,100 local congregations and says the federation has existed for more than 70 years; these figures are as stated on the website and are not independently dated."},G);
+R("Ghana","Africa","West Africa","Assemblies of God, Ghana","Rev. Dr. Stephen Yenusom Wengam, General Superintendent","P.O. Box AN 7644, Accra-North","+233 302 788 583",{w:"https://www.agghana.org/",ns:"https://www.agghana.org/missions",ns2:"https://www.agghana.org/news/handing-over-ceremony-at-the-headquarters-of-assemblies-of-god-ghana",e:"agghanagc@gmail.com",n:"The official website describes AG Ghana as a Pentecostal church committed to evangelism, missions, prayer, social action and fellowship. Local missions include evangelism, church planting, discipleship, leadership training, community development, and youth and children's ministry; foreign missions include cross-cultural missionary training, church planting and humanitarian work. At a September 18, 2026 handover, Rev. Kwadwo Boateng Bempah became Assistant General Superintendent, Rev. Albert Anane General Secretary, Rev. Mrs. Esther Dwommoh National Women's Ministry Director, Rev. Aaron Fant Home Missions Director, and Rev. Boniface Keelson Foreign Missions Director. The Legacy Temple Project Commission aims to provide churches with dignified places of worship."},G);
+R("United Kingdom","Europe",0,"Assemblies of God Great Britain","Rev. Glyn Barrett, National Leader","Arlington House, Bloom Street, Manchester M3 6AJ","+44 1777 817663",{w:"https://www.aoggb.com/",ns:"https://www.aoggb.com/vision",ch:500,n:"The national organization dates its beginning to 1924 and describes a Pentecostal movement focused on reaching people and seeing communities transformed through the Gospel. It emphasizes empowering Spirit-filled people and growing in presence and relevance for a new generation. The WAGF profile lists over 500 churches; that figure may be out of date."},G);
+R("Greece","Europe",0,"Greek Synod of Apostolic Pentecostal Church","Pastor Ilias Chatzieleftheriou, President","Palionellinis 4, 60100 Katerini","+30 2351 036197",{w:"http://pentecost.gr/",ns:"http://pentecost.gr/",e:"pentecost@pentecost.gr",ch:200,pa:90,n:"The national website identifies the body as the Synod of the Apostolic Church of Pentecost of Greece and publishes church addresses, events and contact details. The WAGF profile reports about 200 churches, an equal number of house churches and 90 pastors; these figures may be out of date."},G);
+R("Guam","Oceania",0,"General Council of Assemblies of God of Guam","Rev. Dr. Albert Alquero, General Superintendent","Abundant Life Church, PO Box 9594, Tamuning, GU 96931","+1 671-637-2130",{},G);
+R("Guatemala","North America","Central America","Asambleas de Dios en Guatemala","Rvdo. Cristóbal Montejo","Apartado Postal 2546, Guatemala City","+502 2506 2506",{},G);
+R("Guinea","Africa","West Africa","Eglise des Assemblées de Dieu de Guinée – Conakry","Pasteur Jonathan Ballah, General Superintendent","B.P. 5443, Conakry","+224 67-23-15-04",{ch:40,pa:35,n:"35 pastors, 40 churches and a Bible school. The work is growing."},G);
+R("Guinea","Africa","West Africa","Eglise Pentecôte Alléluia de Guinée","Rev. Bandjou Leno, General Superintendent","Bellevue, Commune de Dixinne, Conakry","+224 657 35 33 82",{},G);
+R("Guyana","South America",0,"Assemblies of God in Guyana","Dr. John O. Smith, General Superintendent","P.O. Box 10830, Georgetown","+592 225 6194",{},G);
+R("Haiti","North America","Caribbean","Les Assemblées de Dieu en Haïti","Calixte Fleuridor, President","Pétion-Ville, Rte. de Frères","+509 404 2455",{},G);
+R("Honduras","North America","Central America","Conferencia Evangélica de las Asambleas de Dios en Honduras","Rvdo. Amadeo Pérez","Apartado 1512, San Pedro Sula","+504 556-7223",{},G);
+R("Hong Kong","Asia",0,"Asia Assembly Mission Council","Rev. John Leung, Chairman","123 Argyle Street, Kowloon","+852 2711-4794",{},G);
+R("Hong Kong","Asia",0,"Assemblies of God Hong Kong Association (AGHK)","Rev. Dr. Timothy Yeung, Chairman","22 Tuen Fun Road, Fu Tai, Tuen Mun, N.T.",null,{},G);
+R("Hungary","Europe",0,"Evangelical Pentecostal Fellowship","Rev. Tamás Földesi, President","Gizella út 37, 1143 Budapest","+36 1 222-0086",{e:"foldesi.tamas@punkosdi.hu"},G);
+R("India","Asia",0,"General Council of the Assemblies of God of India","Rev. Abraham Thomas, All India Superintendent","E-17, Second Street, Anna Nagar East, Chennai 600102, Tamil Nadu","+91 44 26260655",{},G);
+R("Indonesia","Asia",0,"Assemblies of God in Indonesia","Rev. Arif Multi Ardania, General Superintendent","Gedung Kenanga, Jl. Senen Raya #46, Jakarta 10410","+62 21 380-7454",{w:"https://www.gsja.org/",ns:"https://www.gsja.org/",n:"The national organization’s official website uses the Indonesian name Gereja Sidang-Sidang Jemaat Allah (GSJA), the Assemblies of God in Indonesia. It publishes current national leadership (BPP) announcements and ministry news. The site’s June 2026 updates include a message by Pdt. Arif Multi Ardania; other directory contact details remain from the WAGF listing and should be confirmed."},G);
+R("Ireland","Europe",0,"The Irish Assemblies of God CLG","Rev. Brian Somerville, General Superintendent","The Life Centre, Henry Street, Limerick V94 525K (registered address)","+353 61 517444",{w:"https://www.iaog.ie/",ns:"https://www.iaog.ie/",e:"theiaog@gmail.com",n:"The official website identifies the fellowship as The Irish Assemblies of God CLG, a company limited by guarantee and registered charity. Its stated main objective is to advance the Christian faith through Gospel preaching and Scripture teaching. The site lists congregations in Newbridge, Galway, Wexford and Navan, and gives a registered address in Limerick. Leadership details in this profile remain from the WAGF listing and should be confirmed."},G);
+R("Israel","Asia",0,"BFP Israel UIIC","Rev. Oleg Yershoff, General Superintendent","St. Moshe Sharet 9/2, Kfar Saba",null,{},G);
+R("Italy","Europe",0,"Assemblee di Dio in Italia","Gaetano Montante, President","Via Monte Amiata 21, 00013 Fonte Nuova (Roma)","+39 06 491518",{},G);
+R("Ivory Coast","Africa","West Africa","Eglise Evangélique des Assemblées de Dieu de Côte d'Ivoire","Rev. Dr. Charles Marie Konde","26 B.P. 18 Sikensi","+225 58599075",{ch:800,m:1000000,ml:"adherents (more than)",pa:750,n:"Growing since 1958 through missions from the Assemblies of God in France (1958) and the USA (1962). Celebrated its 50th anniversary in 2009. About 100 students attend two campuses of the Theological and Pastoral Institute, with pastors trained from many countries. Has sent 12 missionaries abroad."},G);
+R("Jamaica","North America","Caribbean","General Council of the Assemblies of God in Jamaica Inc.","Rev. David Ewen, First Presiding Bishop","Box 363, Kingston 5","+1 876 927 5865",{},G);
+R("Japan","Asia",0,"Japan Assemblies of God","Rev. Hiromasa Amano, General Superintendent","3-15-20 Komagome, Toshima-ku, Tokyo 170-0003","+81 3 3918 5935",{ch:223,m:12146,ml:"members",n:"The previously listed English-language website could not be verified as reachable during this update. The organization details and reported figures remain from the WAGF listing; the website link has been removed until an official working URL can be confirmed."},G);
+R("Kazakhstan","Asia",0,"Assemblies of God in Kazakhstan","Pastor Yerkin Khaidarov, General Superintendent","263 Gete Str., Almaty 050054","+7 727 257 0976",{},G);
+R("Kazakhstan","Asia",0,"The Union of Christians of Evangelical Faith in Kazakhstan","Pastor Yuri V. Shumayev, General Superintendent","Dukenuly 29, Office 301, Astana Z11C2C3","+7 707 12 144 12",{},G);
+R("Kenya","Africa","East Africa","Kenya Assemblies of God","Dr. Philip Kitoto, General Superintendent","P.O. Box 62922, Nairobi","+254 73 379 2376",{w:"https://www.kag.ke/",ns:"https://www.kag.ke/",n:"The national website says the movement was planted in Kenya in 1972 and is a member of the World Assemblies of God Fellowship. Its stated core purpose is to worship God, evangelize, disciple and serve the community through the love of Jesus Christ. The leadership/contact details in this record come from the WAGF listing and may be out of date."},G);
+R("Kenya","Africa","East Africa","Pentecostal Assemblies of God of Kenya","Rev. Kenneth Adiara Mbalanya, General Superintendent","P.O. Box 671, 40100 Kisumu","+254 726078479",{},G);
+R("Kiribati","Oceania",0,"The Assemblies of God of Kiribati","Rev. Maerere Eria, General Superintendent","Box 209, Eita, Tarawa","+686 28073",{w:"https://agkiribati.org/",ns:"https://agkiribati.org/",n:"The Assemblies of God of Kiribati is the national Pentecostal fellowship in Kiribati affiliated with the World Assemblies of God Fellowship. It serves churches across the Gilbert Islands, Line Islands, and Phoenix Islands."},G);
+R("Kosovo","Europe",0,"Pentecostal Church of Jesus \"Fellowship of the Lord's People\"","Rev. Artur Krasniqi","Rr. Rrustem Statovci nr. 9, 10000 Prishtina","+381 38 225330",{},G);
+R("Lesotho","Africa","Southern Africa","Lesotho Assemblies of God","Rev. Ezekiel Makuebue, General Superintendent","P.O. Box 410, Mafeteng 900","+266 5028 5449",{},G);
+R("Liberia","Africa","West Africa","Liberia Assemblies of God, Inc.","Rev. Dr. Abenda Tamba, General Superintendent","PO Box 1297, Monrovia",null,{w:"https://agl.org.lr/",ns:"https://agl.org.lr/",ch:400,m:75000,ml:"adherents",pa:300,n:"The national website describes Assemblies of God Liberia as a Pentecostal denomination affiliated with the World Assemblies of God Fellowship. It states a mission to propagate the Gospel, encourage worship and fellowship, and develop educational work. The website’s displayed numerical counters are zeroed and are not used here. The WAGF profile reports 400 churches, 75,000 adherents and 300 pastors, and records a 1908 founding; these figures and history may be out of date."},G);
+R("Lithuania","Europe",0,"Union of Pentecostal Churches of Lithuania","Bishop Dmitrij Romanchik","P.O. Box 2448, Vilnius LT-09017","+370 5 2643286",{w:"https://www.pentecost.lt/",ns:"https://www.pentecost.lt/",n:"The national website identifies the fellowship as the Union of Evangelical Faith Christians of Lithuania and describes it as the Pentecostal Church in Lithuania."},G);
+
+/* ---------- M–R ---------- */
+R("North Macedonia","Europe",0,"Christian Center Macedonia","Rev. Zoran Spasovski, President (elected 2010)","P.O. Box 351, 1000 Skopje","+389 75 276 826",{w:"www.ccmkd.info",ch:10,pa:7,n:"Seven pastors and ten active churches. Focus on missions, church planting and starting new churches."},M);
+R("North Macedonia","Europe",0,"Evangelical Church in the Republic of Macedonia","Rev. Peter Petrov, President","F. Ruzvelt 16, P.O. Box 704, 1001 Skopje","+389 2 3245-457",{},M);
+R("Madagascar","Africa",0,"Assemblies of God of Madagascar","Rev. Arthur Rijamamy, General Superintendent (elected May 2015)","B.P. 3963, Antananarivo 101","+261 33 148 1657",{ch:800,m:100000,ml:"adherents",pa:350},M);
+R("Malawi","Africa","Southern Africa","Assemblies of God in Malawi","Rev. Benito Chisamba, President","P.O. Box 1220, Lilongwe","+265 8888 91 547",{},M);
+R("Malawi","Africa","Southern Africa","Pentecostal Assemblies of God in Malawi","Rev. Gilford Matonga","P.O. Box 2071, Lilongwe","+265 888 869 535",{},M);
+R("Malaysia","Asia",0,"The Assemblies of God of Malaysia","Rev. Ong Sek Leang, General Superintendent","95 Jalan Gasing, Seksyen 10, 46000 Petaling Jaya, Selangor","+60 3-7956-5195",{w:"https://ag.org.my/",ns:"https://ag.org.my/about-us/",ns2:"https://ag.org.my/",n:"The national website publishes its doctrinal statement, including belief in one God revealed as Father, Son and Holy Spirit. A site news item dated October 3, 2025 reports that an Accelerate 30 event for smaller churches brought together 147 pastors and leaders to discuss church vitality and reaching the next generation. No current national church or membership totals were verified."},M);
+R("Malta","Europe",0,"General Council of the Assemblies of God of Malta","Rev. Joseph Fenech Laudi, General Superintendent","Evangel, 2/2 Triq il-President Anton Buttigieg, Pembroke PBK 1910","+356 9989 3347",{w:"https://www.aogmalta.org/",ns:"https://www.aogmalta.org/",e:"pastor@cornerstone.org.mt",n:"The national website currently says that it is being reconstructed and directs visitors to contact pastor@cornerstone.org.mt for more information. The leadership information in this profile is from the WAGF listing and may be out of date."},M);
+R("Martinique","North America","Caribbean","Assemblées de Dieu de Martinique","Rev. Farah Abdillahi, Président","1538 quartier Durivage, 97224 Ducos","+596 696 04 30 09",{w:"https://addmartinique.com/",ns:"https://addmartinique.com/",n:"The Assemblées de Dieu de Martinique is the Pentecostal fellowship in Martinique affiliated with the World Assemblies of God Fellowship. It serves churches across the French Caribbean territory."},M);
+R("Mauritius","Africa","Indian Ocean","L'Assemblée de Dieu – Île Maurice","Rev. Georges Leste, Président","6 Robinson Street, Rose-Hill","+230 454 58 39",{},M);
+R("Mexico","North America",0,"El Concilio Nacional de las Asambleas de Dios","Pbro. Enrique González Vázquez, Superintendente General","Nicolás León 118, Col. Jardín Balbuena, Ciudad de México 15900","+52 55 5552-4155",{},M);
+R("Micronesia","Oceania",0,"FSM General Council of Micronesia","Rev. Rullens Phillip, General Superintendent","PO Box 1041, Pohnpei, FM 96941","+691 320 3927",{},M);
+R("Moldova","Europe",0,"Pentecostal Union of Republic of Moldova","Bishop Petru Borsci; Bishop Victor Pavlovski","4/5 Mircea cel Bătrân, Chișinău 2044","+373 22 49 49 91",{},M);
+R("Montenegro","Europe",0,"Lighthouse Christian Center","Rev. Dragan Novakovic",null,"+382 67270933",{},M);
+R("Morocco","Africa",0,"BFP Famille des Assemblées Chrétiennes","Rev. Shembo Andy, Chairman","No 18, Rue Bani Malick, Quartier Aviation, Rabat 10000",null,{},M);
+R("Mozambique","Africa",0,"Igreja Evangélica Assembleia de Deus","Pastor José Alexandre Massango","Caixa Postal 70, Maputo","+258 21 402 140",{},M);
+R("Namibia","Africa","Southern Africa","General Council of the Assemblies of God of Namibia","Pastor Gustav Kamatoto","P.O. Box 30214, Pionierspark, Windhoek","+264 81 253 7183",{},M);
+R("Nauru","Oceania",0,"Assemblies of God of Nauru","Rev. David Deluckner, Superintendent","P.O. Box 291, Republic of Nauru",null,{},M);
+R("Netherlands","Europe",0,"Verenigde Pinkster- en Evangeliegemeenten (VPE) – Dutch Assemblies of God","Rev. William Boné, General Superintendent","Hoofdstraat 55, 3971 KB Driebergen-Rijsenburg","+31 6 43 83 37 65",{ch:130,m:26000,ml:"members",pa:200,n:"Pentecost came to the Netherlands in 1907. In 1967 the USA Assemblies of God helped start the Dutch Central Bible College. Ministries include Youth Alive, Teen Challenge, Europe Advance, Convoy of Hope and Masters Commission. About 60,000 Christians attend a yearly Pentecostal festival. Missionaries serve in Bangladesh, South Africa, Malawi, Spain, Brazil, Aruba and elsewhere."},M);
+R("New Caledonia","Oceania",0,"Union of Assemblies of God in New Caledonia (UADDNC)","Pastor Yvon Dea, General Superintendent","Boîte Postale 1739, 98874 Pont-des-Français",null,{},M);
+R("New Zealand","Oceania",0,"The Assemblies of God in New Zealand","Rev. Terry Bradley, General Superintendent","PO Box 58067, Botany, Auckland 2163","+64 9 265 0063",{w:"https://www.agnz.org/",ns:"https://www.agnz.org/",n:"The national website reports 222 Assemblies of God churches serving 30,000 people across diverse ethnic groups. It also highlights the national youth movement Fearless. These figures are presented as stated on the website and are not independently dated."},M);
+R("Nicaragua","North America","Central America","Conferencia Evangélica Pentecostés de las Asambleas de Dios en Nicaragua","Rvdo. Pedro Pablo Rojas Corea, Superintendente","Km 10.8 Carretera Vieja a León, Managua","+505 22654875",{ch:1164,m:646663,ml:"members (approx.)",pa:1893,pl:87,n:"1,893 pastors, 80 lay ministers and 120 evangelists. 1,164 organized churches and 87 churches in plantation. 3,500 students in biblical institutes. Cross-cultural missionaries serve in Peru, Uruguay, Senegal, India, Nepal, Mauritania and England."},M);
+R("Niger","Africa","West Africa","Eglise des Assemblées de Dieu","Pasteur Moussa Hamani Ali, General Superintendent","B.P. 12239, Niamey","+227 96970424",{ch:60,m:4000,ml:"members (approx.)",pa:50,n:"Started in 1990 with missionaries from France, Burkina Faso and the USA; the national church was formed in 2006. About 95% of the population is Muslim. Runs an NGO, Kamna (\"love\" in Hausa), for education, health and water."},M);
+R("Nigeria","Africa","West Africa","Assemblies of God, Nigeria","Rev. Abel Amadi, General Superintendent","P.O. Box 395, Enugu, Enugu State","+234 803 329 9824",{w:"https://agnigeria.org/",ns:"https://agnigeria.org/about-us/",ch:14300,m:2600000,ml:"adherents and members",pa:11650,n:"The national website describes the General Council as a Pentecostal denomination affiliated with the World Assemblies of God Fellowship and headquartered in Okpoto, Ebonyi State. It reports that Abel Amadi was elected General Superintendent in November 2022. The church, adherent and minister counts in this profile are from the WAGF listing and may be out of date."},M);
+R("Northern Mariana and Palau Islands","Oceania",0,"General Council of the Assemblies of God of the Northern Mariana and Palau Islands","Rev. Michael Rodgers, General Superintendent","P.O. Box 502140, Saipan, MP 96950","+1 670-322-3220",{w:"https://agcnmipa.org/",ns:"https://agcnmipa.org/",n:"The General Council of the Assemblies of God of the Northern Mariana and Palau Islands is the regional fellowship serving both the Northern Mariana Islands and Palau, affiliated with the World Assemblies of God Fellowship."},M);
+R("Palau","Oceania",0,"The Assemblies of God of Palau","Rev. Michael Rodgers, General Superintendent","P.O. Box 502140, Saipan, MP 96950","+1 670-322-3220",{w:"https://agcnmipa.org/",ns:"https://agcnmipa.org/",n:"Palau is served by the General Council of the Assemblies of God of the Northern Mariana and Palau Islands, which oversees the Assemblies of God work in Palau as part of its regional fellowship affiliated with the World Assemblies of God Fellowship."},M);
+R("Norway","Europe",0,"Pentecostal Movement in Norway","Pastor Øystein Gjerme, Chairman and National Leader","Postboks 7007, St. Olavs Plass, N-0130 Oslo","+47 47 45 45 54",{},M);
+R("Pakistan","Asia",0,"Pakistan Assemblies of God","Ps. Samson John, Chairman","180 Raza Block, Allama Iqbal Town, Lahore","+92 42 35414158",{},M);
+R("Panama","North America","Central America","Concilio General de las Asambleas de Dios en Panamá","Rev. Johnny Saucedo, President","Apartado 0819-05318 El Dorado, Ave 12 de Octubre y Transístmica","+507 261-2792",{},M);
+R("Papua New Guinea","Oceania",0,"Assemblies of God of Papua New Guinea","Rev. Joe Pandu, General Superintendent","PO Box 1283, Boroko, NCD",null,{},M);
+R("Paraguay","South America",0,"Concilio de las Asambleas de Dios en la República del Paraguay","Rvdo. Oscar Rodríguez, Presidente Nacional","San Alfonso 4380 c/MacArthur, Asunción","+595 21 600-387",{},M);
+R("Peru","South America",0,"Las Asambleas de Dios del Perú","Rvdo. Juan Carlos Colqui Solórzano, Presidente Nacional","Av. Colombia 325, Pueblo Libre, Lima","+51 1 423-5909",{w:"https://ladp.org.pe/",ns:"https://ladp.org.pe/nosotros/",n:"The national website says the church's early missionary work dates to the 1920s and records a first baptism on February 27, 1927. It describes continued growth through regional churches and spiritual and social service. It also reports work through 75 ecclesiastical regions nationwide."},M);
+R("Philippines","Asia",0,"Philippines General Council of the Assemblies of God","Rev. Rey Calusay, General Superintendent","BBC Compound, Gov. I. Santiago St., Valenzuela City, Metro Manila 1440","+63 36 621-4234",{ch:4000,w:"https://pgcaog.org/",ns:"https://pgcaog.org/",n:"The official PGCAG/AOG Philippines website describes its work in missions, district management, church planting and ministry training, and states a goal of 2,030 churches by 2030. It currently displays undated totals of 2,637 organized churches, 4,703+ active ministers, 22 districts and 1,082+ adherents/believers; the figures are internally unusual and should be verified before use. The WAGF profile reports about 4,000 local churches and says the fellowship was organized in 1953; these historical/profile figures may also be out of date. The former pgcag.com link is not the verified national site."},M);
+R("Poland","Europe",0,"Pentecostal Church in Poland","Dr. Marek Kamiński, Bishop (elected October 2009)","ul. Sienna 68/70, 00-825 Warszawa","+48 22 624 85 75",{ch:230,m:23000,ml:"believers",n:"Vision: keep the Pentecostal experience alive, care for pastors, plant new churches, and prepare the next generation of ministers."},M);
+R("Portugal","Europe",0,"Convenção das Assembleias de Deus em Portugal","Rev. Isaac Reis","Av. Almirante Gago Coutinho 158, 1700-033 Lisbon","+351 218464317",{w:"https://www.cadp.pt/",ns:"https://www.cadp.pt/",n:"The national website describes the movement as rooted in the Bible, which it identifies as its sole rule of faith and conduct for all generations."},M);
+R("Republic of the Congo","Africa","Central Africa","Eglise des Assemblées de Dieu du Congo","Pasteur Jean-Baptiste Bafounguissa","B.P. 5212, Brazzaville",null,{},M);
+R("Republic of the Congo","Africa","Central Africa","Evangelical Mission of the Assemblies of God of Congo (MEADC)","Rev. Alain Mbossa, Président","Inkantsiana Street 34, Talangaï, Brazzaville","+242 066710399",{},M);
+R("Réunion","Africa","Indian Ocean","Assemblies of God of Réunion Island","Pasteur Cédric Cotaya, President","2 impasse la Belle Étoile, Île de la Réunion","+262 692 14 58 09",{e:"cedriccotaya@gmail.com"},M);
+R("Romania","Europe",0,"Assemblies of God Romania","Dr. Ioan Ceuță, President","Str. Răsăritului nr. 59, Sector 6, Bucharest 061203","+40 722 356 625",{w:"https://www.cultadr.ro/",ns:"https://www.cultadr.ro/",ch:150,pa:200,n:"The national website says Assemblies of God mission work in Romania began around 1920–1924, was interrupted during the war, and resumed between 1960 and 1980. It describes communist-era closures in 1950 and later leadership training through the Romanian Bible Institute. The profile's church and minister counts and recognition milestones are from the WAGF listing and may be out of date."},M);
+R("Romania","Europe",0,"Rugul Aprins Toflea","Rev. Vasile Căpitanu, General Superintendent","Toflea, Galați County","+40 741 707 979",{},M);
+R("Romania","Europe",0,"BFP Romania – Asociația Religioasă Creștină Neemia Brateiu","Rev. Norbert Kraus, Chairman","Brateiu nr. 8, 557055 Brateiu",null,{},M);
+R("Russia","Europe",0,"Russian Assemblies of God","Dr. Alexander Purshaga, General Superintendent","Ul. Schorsa 9, 119620 Moscow","+7 495 505 2141",{},M);
+R("Russia","Europe",0,"Russian Church of Christians of Evangelical Faith","Bishop Eduard Grabovenko, Head Bishop","Fabritsiusa Street 31A, 125363 Moscow","+7 499 493 15 41",{},M);
+R("Rwanda","Africa","East Africa","Rwanda Pentecostal Assemblies of God","Rev. Daniel Kagaba Ryumugabe, General Superintendent","B.P. 957, Kigali",null,{},M);
+
+/* ---------- S–Z ---------- */
+R("Samoa","Oceania",0,"General Council of the Assemblies of God in Samoa","Rev. Dr. Tavita Pagaialii, General Superintendent","P.O. Box 3673, Apia","+685 699-1750",{e:"tavitapagaialii@gmail.com"},S);
+R("Senegal","Africa","West Africa","The Assemblies of God in Senegal","Rev. Félix N'Diaye","B.P. 12212, Dakar","+221 774114636",{ch:90,m:10000,ml:"adherents",pa:56,pp:21,n:"Has an executive committee and numerous ministry departments, with more than 17,000 children in Bible clubs and Sunday schools. Runs a Bible college (IBTS), advanced pastor training (WAAST), nine private Christian elementary schools and one secondary school, including a school for the deaf."},S);
+R("Serbia","Europe",0,"Christ Evangelical Church (Hristova Jevanđeoska Crkva)","Rev. Jovica Popov","Ivana Zajca 17, 24000 Subotica","+381 64 26 39 816",{n:"Churches of Serbian, Hungarian, Slovak and Roma backgrounds. Started a Pentecostal Bible school in 2011. Led by a presbytery of a president, a secretary and elders."},S);
+R("Sierra Leone","Africa","West Africa","Sierra Leone Assemblies of God","Rev. Christian Fayia, General Superintendent","P.O. Box 522, Freetown","+232 76 713 090",{},S);
+R("Singapore","Asia",0,"The Assemblies of God of Singapore","Rev. Dominic Yeo, General Superintendent","247 Paya Lebar Road #01-01, Singapore 409045","+65 6468 4444",{n:"Rev. Dominic Yeo was elected chairman of the World Assemblies of God Fellowship in 2023 (per Wikipedia)."},S);
+R("Slovakia","Europe",0,"Apostolic Church in Slovakia (Apoštolská cirkev na Slovensku)","Bishop Pavol Zsolnai","Bratislavská 1, 040 11 Košice","+421 55 644 1422",{w:"https://www.acsr.sk/",ns:"https://www.acsr.sk/",ch:30,m:5000,ml:"believers",pa:40,pp:20,n:"The national website describes the church as Protestant, evangelical and Pentecostal, and includes information about church planting. The WAGF profile reports that an independent church was established in 1932, the movement was recognized by the state in 1977, and lists 30 churches, 5,000 believers, 40 pastors and 20 preaching points; these figures and historical details may be out of date."},S);
+R("Slovenia","Europe",0,"Union of Pentecostal Churches of Slovenia","Dr. Daniel Grabar","Cirila Metoda 1A, 9000 Murska Sobota","+386 73 341 341",{},S);
+R("Solomon Islands","Oceania",0,"Assemblies of God of the Solomon Islands","Rev. John Subu Taunani, General Superintendent","P.O. Box 51, Honiara",null,{},S);
+R("South Africa","Africa","Southern Africa","Assemblies of God of South Africa","Dr. Peter Watt, Chairman; Dr. Osborn Hleza, Deputy Chairman","P.O. Box 957, Meyerton 1960","+27 16 366 1913",{n:"Founded in 1925 and, like AG Queensland, not initially aligned with the US fellowship (per Wikipedia)."},S);
+R("South Africa","Africa","Southern Africa","South Africa Assemblies of God Fellowship","Rev. S.M. Phillip Dungulu, General Superintendent","264 Christoffel Street, Pretoria West, Gauteng 0183","+27 12 327 0094",{},S);
+R("South Africa","Africa","Southern Africa","International Assemblies of God of South Africa","Rev. Dr. Gordon Lebelo, General President","P.O. Box 505, Roodepoort 1725","+27 11 760-6178",{},S);
+R("South Korea","Asia",0,"Assemblies of God Korea (Gwanghwamun)","Rev. Ham Dong Kuen, General Superintendent","12 Daecheon-ro, Haeundae-gu, Busan","+82 51 731-1900",{},S);
+R("South Korea","Asia",0,"Assemblies of God of Korea (Yeouido, Seoul)","Dr. Younghoon Lee, Representative General Superintendent; Rev. Tae Keun Lee and Rev. Donggyun Jung, General Superintendents","15 Gukhoe-daero 76-gil, Yeongdeungpo-gu, Seoul 07239","+82 2 786-1355",{},S);
+R("South Korea","Asia",0,"Jesus Assemblies of God in Korea","Rev. Yong Mok Cho, General Superintendent","Grace and Truth Church, 193 Anyang-ro, Manan-gu, Anyang-si, Gyeonggi-do 14089","+82 31 446-5831",{},S);
+R("Spain","Europe",0,"Federación Asambleas de Dios de España (FADE)","Rev. Juan Carlos Escobar, Presidente (elected 2004)","Apartado 35083, Madrid 28037","+34 91 741 7995",{e:"presidente@asambleasdedios.es",ch:225,m:20000,ml:"adherents (over)",pa:400,pl:80,n:"225 churches plus about 80 mission points. Bible school near Córdoba with over 30 extension schools and 800 students. 8 missionaries serve in Peru, Bolivia, Romania and elsewhere. Four pillars: evangelism, church planting, missions and ministerial formation."},S);
+R("Sri Lanka","Asia",0,"Assemblies of God of Ceylon","Rev. Dr. Chrissokumar Handy, General Superintendent / Chairperson",null,"+94 11 2247491",{n:"The previously listed national website and email domain could not be verified as reachable during this update. The organization and contact details remain from the WAGF listing and should be confirmed locally."},S);
+R("Suriname","South America",0,"Stichting Gemeenten Gods Suriname (Assemblies of God Suriname)","Rev. Irving Chin Sie Jen, Superintendent","Hajaristraat 24, Paramaribo","+597 421 260",{},S);
+R("Switzerland","Europe",0,"Schweizerische Pfingstmission (SPM) – Pentecostal Assemblies of Switzerland","Marco Hofmann, President","Hofwiesenstr. 141, CH-8057 Zürich","+41 62 832 20 10",{ch:67,m:10000,ml:"members",n:"Founded in 1936. 67 churches. Involved in seven main mission fields on three continents, with missions activity in over 50 countries."},S);
+R("Taiwan","Asia",0,"The China Assemblies of God Taiwan District Council","Rev. Yen Chin Long","God's Love Assembly of God, 21 Chang Chun Rd 5th Fl, Taipei 10450","+886 2-25682292",{},S);
+R("Tanzania","Africa","East Africa","The General Council of the Tanzania Assemblies of God","Rev. Dr. Barnabas Mtokambali, General Superintendent","P.O. Box 8427, Dar es Salaam","+255 22 246 1914",{},S);
+R("Tanzania","Africa","East Africa","BFP Tanzania – Rhema Outreach Church","Rev. Johannes Kazimbazi, Chairman","P.O. Box 1191, Bukoba",null,{},S);
+R("Thailand","Asia",0,"Thailand Assemblies of God","Rev. Dr. Surachai Wuttiudomlert","21/500 Muu Suwanniwait Soi 19, Nawamin 42, Klong-gum, Bangkok 10240","+66 2 734-8964",{},S);
+R("Thailand","Asia",0,"Assemblies of God Fellowship Thailand","Rev. Meechai Kowae","10 Phatthanakan 17 Alley, Suan Luang, Bangkok 10250","+66 98 045 5992",{},S);
+R("Thailand","Asia",0,"Full Gospel Assemblies of Thailand (FGAT)","Rev. Surasit Chonburi","195 Soi Udom Suk 37, Bang Chak, Phra Khanong, Bangkok 10260","+66 642439777",{},S);
+R("Togo","Africa","West Africa","Eglise des Assemblées de Dieu du Togo","Dr. Ayi Migbloinsan Adade, General Superintendent","01 BP 2527, Lomé 01","+228 222 13036",{n:"The previously listed national website could not be verified as reachable during this update. The organization and contact details remain from the WAGF listing and should be confirmed locally."},S);
+R("Tonga","Oceania",0,"Tongan Assemblies of God Churches","Rev. Niutoni Toe'Api, General Superintendent","PO Box 613, Nuku'alofa","+676 42001",{},S);
+R("Uganda","Africa","East Africa","Uganda Assemblies of God","Rev. Henry Elem, Acting General Superintendent","Kalina Zone, P.O. Box 27944, Kampala","+256 78 2662912",{},S);
+R("Uganda","Africa","East Africa","Pentecostal Assemblies of God – Uganda","Rev. Bishop Dr. Simon Peter Emiau, Presiding Bishop","Plot 64 Luthuli Avenue, P.O. Box 10113, Kampala","+256 414 220138",{},S);
+R("Uganda","Africa","East Africa","BFP Uganda – Fellowship of Community Churches, Southern Region","Pastor Fredie Sekyewa, Chairman","P.O. Box 81, Kyotera",null,{},S);
+R("Ukraine","Europe",0,"Ukrainian Pentecostal Church","Bishop Anatoliy Kozachok, Senior Bishop","Oneskevicha 3, 03115 Kyiv","+380 44 424 2580",{w:"https://www.chve.org.ua/",ns:"https://www.chve.org.ua/",ch:1510,m:104000,ml:"members",pa:1300,n:"The WAGF profile reports more than 1,300 pastors and describes rehabilitation centres, orphanages, homes for older people, prison ministry, Sunday schools and international missions. The national website also publishes current church news; all WAGF figures may be out of date."},S);
+R("Ukraine","Europe",0,"BFP Ukraine – Association of Community Churches of Ukraine (ACCU)","Rev. Igor Hembliuk, Chairman","Heroiv UPA Street 73v, 79041 Lviv",null,{},S);
+R("United States","North America",0,"The General Council of the Assemblies of God","Doug Clay, General Superintendent (elected August 2017)","1445 N. Boonville Ave., Springfield, MO 65802","+1 417 862-2781",{w:"https://ag.org/",ns:"https://ag.org/",ch:12800,m:3000000,ml:"adherents (more than)",pa:37000,n:"The WAGF profile describes the fellowship's mission as evangelizing the lost, worshipping God, discipling believers and demonstrating God's love through compassion. It also reports nearly 37,000 pastors and ministry leaders and missionaries serving in 255 countries, territories and provinces; these figures may be out of date. The official website was reachable but blocked automated reading during this check."},S);
+R("Uruguay","South America",0,"Concilio General de las Asambleas de Dios en el Uruguay","Rvdo. Daniel Madrazo, President (superintendent since February 2015)","Soriano 1398, CP 11200, Montevideo","+598 2 900-0592",{ch:154,m:18000,ml:"adherents",pa:238,n:"The WAGF listing reports 11 missionaries fully supported by the Uruguayan church. The website previously listed here redirected to unrelated gambling content when checked on October 7, 2026, so the link has been removed pending verification of an official replacement."},S);
+R("Vanuatu","Oceania",0,"Assemblies of God of Vanuatu (Federation of Ni-Vanuatu Assemblies of God)","Rev. Kiel Maimai, General Superintendent","PO 2119-9886, Nouméa Cedex, New Caledonia","+678 710-9983",{},S);
+R("Venezuela","South America",0,"Asambleas de Dios de Venezuela","Rvdo. Eulogio Amado Rodríguez, Presidente","Centro Comercial Propatria, Nivel 5 Local B-8, Caracas 1010","+58 212 870 4060",{},S);
+R("West Indies","North America","Caribbean","Pentecostal Assemblies of the West Indies","Pastor Sonny Williams, General Bishop","P.O. Box 100, Port of Spain, Trinidad","+1 868 662 2485",{w:"https://pawi.org/",ns:"https://pawi.org/",n:"The Pentecostal Assemblies of the West Indies (PAWI) is the regional fellowship serving Trinidad & Tobago and the wider Caribbean, affiliated with the World Assemblies of God Fellowship. It oversees hundreds of churches and ministers across the region."},S);
+R("Zambia","Africa","Southern Africa","Assemblies of God in Zambia","Rev. Lipenga Banda, General Superintendent","P.O. Box 310106, Chelstone, Lusaka","+260 95 720868",{},S);
+R("Zambia","Africa","Southern Africa","Pentecostal Assemblies of God – Zambia","Bishop Dr. Joshua H. K. Banda","P.O. Box 31598, Lusaka","+260 96 2302000",{},S);
+R("Zimbabwe","Africa","Southern Africa","General Council Assemblies of God in Zimbabwe","Bishop Shakespear Tele, General Superintendent",null,"+263 774 01092",{},S);
+R("Zimbabwe","Africa","Southern Africa","Pentecostal Assemblies of Zimbabwe","Rev. Nevermind Muparutsa, Presiding Bishop","P.O. Box 792, Mutare","+263 772 75901",{},S);
+
+
+const STATUS = {
+  official:{label:"Official WAGF information",c:"#1E9E5E"},
+  national:{label:"National organization information",c:"#3B5BDB"},
+  public:{label:"Publicly reported information",c:"#F4B223"},
+  none:{label:"Not currently available",c:"#98A0BC"}
+};
+const CONT=[
+  {n:"Africa",k:"africa"},{n:"Asia",k:"asia"},{n:"Europe",k:"europe"},
+  {n:"North America",k:"na"},{n:"South America",k:"sa"},{n:"Oceania",k:"oc"}
+];
+const kv=n=>{const c=CONT.find(x=>x.n===n)||CONT[0];return `--k:var(--c-${c.k});--on:var(--on-${c.k})`};
+const st={q:"",continent:"All",status:"All",sort:"country"};
+const $=id=>document.getElementById(id);
+const fmt=n=>n==null?null:n.toLocaleString("en-US");
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function tiles(){
+  const sel=st.continent!=="All";
+  $("tiles").className="tiles"+(sel?" has-sel":"");
+  $("tiles").innerHTML=CONT.map(c=>{
+    const n=DATA.filter(d=>d.continent===c.n).length;
+    return `<li><button class="tile" style="${kv(c.n)}" data-c="${c.n}" aria-pressed="${st.continent===c.n}"><b>${c.n}</b><span>${n} fellowships</span></button></li>`;
+  }).join("");
+}
+function statusChips(){
+  const present=Object.keys(STATUS).filter(k=>DATA.some(d=>(d.status||"none")===k));
+  $("statuses").hidden=present.length<2;
+  if(present.length<2)return;
+  $("statuses").innerHTML=[["All","Any source"],...present.map(k=>[k,STATUS[k].label])].map(([v,l])=>
+    `<button class="chip" data-s="${v}" aria-pressed="${st.status===v}">${v==="All"?"":`<span class="dot" style="background:${STATUS[v].c}"></span>`}${l}</button>`).join("");
+}
+$("legend").innerHTML=Object.values(STATUS).map(v=>`<li><span class="dot" style="background:${v.c}"></span>${v.label}</li>`).join("");
+$("listed").textContent=`${DATA.length} national fellowships are listed, drawn from the WAGF participating-countries pages.`;
+
+function match(d){
+  if(st.continent!=="All"&&d.continent!==st.continent)return false;
+  if(st.status!=="All"&&(d.status||"none")!==st.status)return false;
+  if(!st.q)return true;
+  const hay=[d.org,d.country,d.continent,d.region,d.address,d.leader,d.n].filter(Boolean).join(" ").toLowerCase();
+  return st.q.toLowerCase().split(/\s+/).every(w=>hay.includes(w));
+}
+const row=d=>{
+  const i=DATA.indexOf(d);
+  const num=d.churches?[d.churches,"churches"]:d.members?[d.members,"members"]:null;
+  return `<button class="row" style="${kv(d.continent)}" data-i="${i}"><span class="bar"></span>
+    <span class="t"><b>${esc(d.country)}</b><i>${esc(d.org)}</i></span>
+    <span class="n">${num?`<b>${fmt(num[0])}</b><small>${num[1]}</small>`:""}</span></button>`;
+};
+function render(){
+  const rows=DATA.filter(match);
+  const cmp={country:(a,b)=>a.country.localeCompare(b.country)||a.org.localeCompare(b.org),
+    churches:(a,b)=>(b.churches||0)-(a.churches||0),adherents:(a,b)=>(b.members||0)-(a.members||0)}[st.sort];
+  rows.sort(cmp);
+  const filtered=st.q||st.continent!=="All"||st.status!=="All";
+  $("clear").hidden=!filtered;
+  $("count").textContent=`${rows.length} ${rows.length===1?"record":"records"}`;
+  if(!rows.length){$("results").innerHTML=`<div class="empty"><b>No matches</b>Try a country name, or clear the filters.</div>`;return}
+  if(st.sort==="country"&&st.continent==="All"&&!st.q){
+    $("results").innerHTML=CONT.map(c=>{
+      const g=rows.filter(d=>d.continent===c.n);
+      return g.length?`<section style="${kv(c.n)}"><div class="band"><h2>${c.n}</h2><span>${new Set(g.map(x=>x.country)).size} countries<br>${g.length} fellowships</span></div><div class="index">${g.map(row).join("")}</div></section>`:"";
+    }).join("");
+  }else{
+    $("results").innerHTML=`<div class="flat">${rows.map(row).join("")}</div>`;
+  }
+}
+function field(label,val,link){
+  if(val==null||val==="")return `<div class="f"><dt>${label}</dt><dd class="na">Not currently available</dd></div>`;
+  let v=esc(val);
+  if(link==="mail")v=`<a href="mailto:${v}">${v}</a>`;
+  if(link==="tel")v=`<a href="tel:${String(val).split("/")[0].replace(/[^\d+]/g,"")}">${v}</a>`;
+  if(link==="web"){const u=/^https?:/.test(val)?val:"https://"+val;v=`<a href="${esc(u)}" rel="noopener noreferrer" target="_blank">${v}</a>`}
+  return `<div class="f"><dt>${label}</dt><dd>${v}</dd></div>`;
+}
+function openSheet(i){
+  const d=DATA[i],s=STATUS[d.status||"none"],dlg=$("sheet");
+  const web=d.website||d.w, url=web?(/^https?:/.test(web)?web:"https://"+web):null;
+  const tel=d.phone?String(d.phone).split("/")[0].replace(/[^\d+]/g,""):null;
+  const acts=[tel?`<a class="act" href="tel:${tel}">Call</a>`:"",d.e?`<a class="act" href="mailto:${esc(d.e)}">Email</a>`:"",url?`<a class="act" href="${esc(url)}" target="_blank" rel="noopener noreferrer">Website</a>`:""].join("");
+  dlg.setAttribute("style",kv(d.continent));
+  dlg.innerHTML=`<div class="sheet"><header>
+    <div class="where">${esc(d.continent)}${d.region?" · "+esc(d.region):""}</div>
+    <h3 id="st">${esc(d.country)}</h3>
+    <p class="org">${esc(d.org)}</p>
+    <span class="badge"><span class="dot" style="background:${s.c}"></span>${s.label}</span>
+    <button class="x" aria-label="Close" id="cl">×</button></header>
+    ${acts?`<div class="acts">${acts}</div>`:""}
+    <div class="body"><dl>
+      ${field("Leadership",d.leader)}${field("Address",d.address)}
+      ${field("Phone",d.phone,"tel")}${field("Email",d.e,"mail")}${field("Website",web,"web")}
+      ${field("Churches",d.churches?fmt(d.churches):null)}
+      ${field(d.members?(d.ml||"Members").replace(/^./,c=>c.toUpperCase()):"Members",d.members?fmt(d.members):null)}
+      ${field("Pastors / ministers",d.pa?fmt(d.pa):null)}
+      ${field("Preaching points",d.pp)}${field("Church plants",d.pl)}
+      ${field("History and notes",d.n)}
+    </dl></div>
+    <footer>${d.ns?`Sources: <a href="${esc(d.ns)}" target="_blank" rel="noopener noreferrer">National organization website</a>. `:""}${d.ns2?`<a href="${esc(d.ns2)}" target="_blank" rel="noopener noreferrer">National update</a>. `:""}${d.source?`<a href="${esc(d.source)}" target="_blank" rel="noopener noreferrer">World AG Fellowship profile</a> (listing as published; may be out of date). `:""}Please verify details with the organization directly.</footer></div>`;
+  dlg.showModal();
+  $("cl").onclick=()=>dlg.close();
+}
+document.addEventListener("click",e=>{
+  const t=e.target.closest(".tile");
+  if(t){st.continent=st.continent===t.dataset.c?"All":t.dataset.c;tiles();render();
+    if(st.continent!=="All")$("explorer").scrollIntoView({behavior:"smooth",block:"start"});return}
+  const c=e.target.closest(".chip");
+  if(c){st.status=c.dataset.s;statusChips();render();return}
+  const r=e.target.closest(".row");
+  if(r){openSheet(+r.dataset.i);return}
+  if(e.target===$("sheet"))$("sheet").close();
+});
+$("q").addEventListener("input",e=>{st.q=e.target.value.trim();render()});
+$("sort").addEventListener("change",e=>{st.sort=e.target.value;render()});
+$("clear").addEventListener("click",()=>{st.q="";st.continent="All";st.status="All";$("q").value="";tiles();statusChips();render()});
+tiles();statusChips();render();
+</script>
+</body>
+</html>
