@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Feedback - World Assemblies of God</title>
+<link rel="stylesheet" href="AG.css">
+    </head>
+    <body>
+         <header id="stickyNav">
+                <div class="nav-inner">
+                    <nav>
+        <a class="decor" href="index.html">Home</a>
+        <a class="decor" href="about1.html">About</a>
+        <a class="decor" href="#">Feedback</a>
+        <a class="decor" href="Signin1.html">Sign in</a>
+        <a class="decor" href="your country.html">Country</a>
+                    </nav>
+                </div>
+            </header>
+        <br>
+        <div class=logo><img height="53" width="10%" src="kui.jpg" alt="logo">
+        <img height="53" width="10%" src="yuto.jpg" alt="logo 2"></div>
+        <h1>What Your Feedback Means To Us</h1>
+        <p><mark>Although a lot of effort and many contributions have been made to make this website superb, we agree that it is not the best it can be and that we are nowhere near perfection. Your feedback, comments, positive criticism, views and motivation mean a great deal to us, because they help us improve this website so that you can enjoy an upgraded user experience, to the glory of God. Please leave your feedback.</mark></p>
+
+        <form name="feedback" method="POST" action="/thanks.html" data-netlify="true" data-netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="feedback">
+        <p hidden><label>Do not fill this in: <input name="bot-field"></label></p>
+        <div class="center">
+        <label for="email">Your email (optional, so we can reply)</label><br>
+        <input type="email" id="email" name="email" placeholder="you@example.com">
+        <br><br>
+        <label for="message">Your feedback</label><br>
+        <textarea id="message" name="message" placeholder="Type your feedback here" required></textarea>
+        <br>
+        <button style="text-align: center;" class="btn" type="submit">Send feedback</button></div>
+    </form>
+               <p style="text-align: center;"><mark> Click <a href="Signin1.html">here</a> to sign up so we can keep you up to date about this website.</mark></p>
+               <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="AG.Json" type="application/json" id="churchData"></script>
+<script src="AG.js"></script>
+</body>
+</html>
