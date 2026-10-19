@@ -60,8 +60,8 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(3.6rem,17vw,7rem);
 .search:focus-within{border-color:var(--flame)}
 .search svg{flex:none;color:var(--muted)}
 .search input{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font:inherit;padding:14px 0;outline:none}
-.chips{display:flex;gap:8px;overflow-x:auto;padding:10px 0 0;scrollbar-width:none}
-.chips::-webkit-scrollbar{display:none}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:10px 0 0;}
+
 .chip{flex:none;border:2px solid var(--line);background:transparent;border-radius:999px;padding:7px 14px;cursor:pointer;min-height:40px;font-size:.9rem}
 .chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px}
@@ -121,6 +121,7 @@ dl{margin:0}
 .legend{display:grid;gap:8px;margin:0 0 10px;padding:0;list-style:none}
 .about p{color:var(--muted);font-size:.92rem;margin:0}
 .notice{margin:26px 0 0;padding:4px 0 4px 18px;border-left:6px solid var(--flame);font-size:.9rem}
+
 .notice b{display:block;font-family:var(--display);font-size:1.15rem;margin-bottom:4px}
 footer.site{padding:26px 0 calc(40px + env(safe-area-inset-bottom,0px));font-size:.82rem;color:var(--muted)}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
@@ -134,7 +135,7 @@ footer.site{padding:26px 0 calc(40px + env(safe-area-inset-bottom,0px));font-siz
         <a class="decor" href="about1.html">About</a>
         <a class="decor" href="feedback1.html">Feedback</a>
         <a class="decor" href="Signin1.html">Sign in</a>
-        <a class="decor" href="your country.html">Country</a>
+        <a class="decor" href="your-country.html">Country</a>
                     </nav>
                 </div>
             </header>
